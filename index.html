@@ -3,64 +3,42 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>GH Runner — Digital Doping For Your Business</title>
-  <meta name="description" content="GH Runner — the GrowthHackers take on the Chrome dino game. Strategy, Iteration, Growth.">
-  <meta name="theme-color" content="#0d0d10">
-  <meta property="og:title" content="GH Runner">
-  <meta property="og:description" content="Strategy. Iteration. Growth. Now jump some cacti.">
+  <title>Dino Runner</title>
+  <meta name="theme-color" content="#f7f7f7">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="engine.css">
   <link rel="stylesheet" href="brand.css">
 </head>
 
 <body class="offline">
 
-  <header class="gh-topbar">
-    <div class="gh-brand">
-      <svg class="gh-logo" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="GH">
-        <circle cx="32" cy="32" r="29" stroke="#ff6a1a" stroke-width="2.5" fill="none"/>
-        <text x="32" y="40" text-anchor="middle" font-family="Inter, sans-serif" font-weight="800" font-size="22" letter-spacing="-1" fill="#ff6a1a">GH</text>
-      </svg>
-      <div class="gh-wordmark">
-        <b>GH Runner</b>
-        <span>GrowthHackers</span>
-      </div>
-    </div>
-    <div class="gh-pillars">
-      <i>Strategy</i><span class="dot">&#8226;</span><i>Iteration</i><span class="dot">&#8226;</span><i>Growth</i>
-    </div>
-  </header>
-
-  <main class="gh-stage">
-    <div class="gh-hud">
-      <span class="gh-status">Live run</span>
-      <span>Space / &#8593; to jump &nbsp;&#183;&nbsp; &#8595; to duck</span>
+  <main class="stage">
+    <div class="hud">
+      <span class="title">Dino Runner</span>
+      <span class="hint">Space / &#8593; jump &nbsp;&#183;&nbsp; &#8595; duck</span>
     </div>
 
     <div class="interstitial-wrapper">
-      <div class="gh-overlay" id="gh-start">
-        <h2>Ready to grow?</h2>
-        <p>Dodge the obstacles. Don't break the streak.</p>
-        <span class="gh-key">Press <b>Space</b> or tap to run</span>
+      <div class="overlay" id="start">
+        <p>Press <b>Space</b> or tap to start</p>
       </div>
-      <div class="gh-overlay gh-hidden" id="gh-over">
-        <h2>Run ended</h2>
-        <p>Distance reached: <b id="gh-final-score">00000</b></p>
-        <button class="gh-cta" id="gh-replay">Iterate &amp; retry</button>
+      <div class="overlay hidden" id="over">
+        <h2>Game over</h2>
+        <p>Distance: <b id="final-score">00000</b></p>
+        <button class="btn" id="replay">Play again</button>
       </div>
     </div>
 
     <!-- Engine expects this element (hidden); init() sets its visibility. -->
     <div class="icon icon-offline" aria-hidden="true"></div>
 
-    <!-- Chrome dino sprite sheets, served via CDN (CORS-enabled so boot.js can
-         recolor them to GH orange on a canvas). Audio template kept empty. -->
+    <!-- Chrome dino sprite sheets via CDN. -->
     <div id="offline-resources">
-      <img id="offline-resources-1x" crossorigin="anonymous" alt=""
+      <img id="offline-resources-1x" alt=""
            src="https://cdn.jsdelivr.net/gh/wayou/t-rex-runner@gh-pages/assets/default_100_percent/100-offline-sprite.png">
-      <img id="offline-resources-2x" crossorigin="anonymous" alt=""
+      <img id="offline-resources-2x" alt=""
            src="https://cdn.jsdelivr.net/gh/wayou/t-rex-runner@gh-pages/assets/default_200_percent/200-offline-sprite.png">
       <template id="audio-resources">
         <audio id="offline-sound-press"></audio>
@@ -69,11 +47,6 @@
       </template>
     </div>
   </main>
-
-  <footer class="gh-footer">
-    <span class="gh-tag">Digital Doping For Your Business</span>
-    <span><a href="https://gh.company" target="_blank" rel="noopener">gh.company</a> &#183; built for the team</span>
-  </footer>
 
   <script src="engine.js"></script>
   <script src="boot.js"></script>
