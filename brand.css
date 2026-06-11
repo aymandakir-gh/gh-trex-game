@@ -140,3 +140,10 @@ body.arcade-mode .overlay { position: fixed; border-radius: 0; }
 
 /* Hide engine legacy bits */
 #main-content, #offline-resources, .icon-offline { display: none !important; }
+
+/* ---------------- Kart 3D ---------------- */
+.kart-board { display: block; }
+.kart-mount { border-radius: 16px; overflow: hidden; border: 1px solid var(--line); box-shadow: 0 18px 50px -30px rgba(0,0,0,.4); line-height: 0; }
+.kart-mount canvas, .kart-canvas { display: block; width: 100%; max-width: min(92vw, 820px); height: auto; }
+.kart-hud { position: absolute; top: 12px; left: 0; right: 0; text-align: center; color: #fff; font-size: 14px; font-weight: 600; text-shadow: 0 1px 3px rgba(0,0,0,.5); font-variant-numeric: tabular-nums; pointer-events: none; }
+.kart-tip { position: absolute; bottom: 12px; left: 0; right: 0; text-align: center; color: rgba(255,255,255,.9); font-size: 12px; text-shadow: 0 1px 3px rgba(0,0,0,.5); pointer-events: none; }
