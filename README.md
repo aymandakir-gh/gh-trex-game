@@ -1,38 +1,48 @@
-# Dino Runner
+# 🕹️ Dino Arcade
 
-A clean, light, unbranded take on the Chrome offline dino game. Open `index.html` and play.
+A small, clean web arcade — starting from a Chrome-dino clone and growing into a multi-game launcher. No build step, no bundler, no dependencies.
 
-Live: https://aymandakir-gh.github.io/gh-trex-game/
+**▶ Play:** https://aymandakir-gh.github.io/gh-trex-game/
 
-## What's inside
+**🗺 Plan:** see [ROADMAP.md](ROADMAP.md) for the full phased plan (launcher + classic games → local 2-player → 3D kart → online multiplayer).
 
-| File | Role |
+## Games
+
+| Game | Status |
 |---|---|
-| `index.html` | Minimal light shell; loads the Chrome dino sprite sheets from a CDN |
-| `engine.js` | Game engine (forked from [wayou/t-rex-runner](https://github.com/wayou/t-rex-runner), BSD-3) |
-| `engine.css` | Original engine layout |
-| `brand.css` | Light, minimal theme + an override that neutralizes the engine's fullscreen "arcade mode" so the game stays inside its card |
-| `boot.js` | Starts the engine, injects a silent audio clip, wires the start / game-over overlays |
+| **Dino Runner** — jump cacti, grab coins, beat your best | ✅ Playable |
+| Snake · 2048 · Breakout | 🚧 Phase 1 (launcher) |
+| 2-player Dino battle (local) | 🔜 Phase 2 |
+| 3D kart racer | 🔜 Phase 3 |
+| Online multiplayer | 🔜 Phase 4 |
 
-The classic dark Chrome dino is used as-is on a light background — no recolor, no build step, no bundler.
+## Dino Runner features
+
+- Light / dark themes (🌙 button or **D**) + auto night-mode the longer you survive
+- Procedural sound effects + mute (🔊 button or **M**)
+- High score saved between sessions, with a "new best" celebration
+- Difficulty: Easy / Normal / Hard
+- Collectible coins
+- Fullscreen "zoom-in" when a run starts · **Esc** to exit
 
 ## Controls
 
-- **Space / ↑** — jump
-- **↓** — duck
-- **Tap** — jump (touch)
+- **Space / ↑** — jump · **↓** — duck · **tap** — jump (touch)
 
 ## Run locally
 
 ```bash
-# any static server, or just open index.html directly
-python3 -m http.server 8080   # → http://localhost:8080
+python3 -m http.server 8080   # then open http://localhost:8080
 ```
+
+## How it works
+
+The classic Chrome dino sprite sheets are loaded from a CDN (jsDelivr, CORS-enabled) and the game runs on the original engine (forked from [wayou/t-rex-runner](https://github.com/wayou/t-rex-runner), BSD-3). The arcade shell (themes, HUD, sound, scores, coins, fullscreen) is layered on top in `brand.css` + `boot.js`.
 
 ## Deploy
 
-Auto-deploys to GitHub Pages on every push to `main` (see `.github/workflows/deploy.yml`). Also works as a zero-config import on Vercel/Netlify.
+Auto-deploys to GitHub Pages on every push to `main` via `.github/workflows/deploy.yml`. Also imports zero-config into Vercel/Netlify.
 
 ---
 
-Game engine © The Chromium Authors / @liuwayong (BSD-3-Clause, see `LICENSE`).
+Engine © The Chromium Authors / @liuwayong (BSD-3-Clause, see `LICENSE`).
