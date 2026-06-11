@@ -1,14 +1,29 @@
 /* ============================================================
-   Dino Runner — light, minimal theme
+   Dino Runner — light/dark themes, fullscreen arcade, HUD, juice
    ============================================================ */
 :root {
-  --bg: #f7f7f7;
+  --bg: #f4f5f7;
+  --bg2: #ffffff;
   --card: #ffffff;
-  --line: #e3e3e6;
-  --text: #202124;
-  --muted: #80868b;
-  --accent: #202124;
+  --line: #e4e5e9;
+  --text: #1f2227;
+  --muted: #8a8f98;
+  --accent: #1f2227;
+  --coin: #f5b301;
+  --good: #18a957;
   --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --radius: 18px;
+}
+
+/* Night palette — applied on manual dark toggle OR engine auto night-mode */
+body.theme-dark, body.inverted {
+  --bg: #11131a;
+  --bg2: #171a22;
+  --card: #171a22;
+  --line: #262a35;
+  --text: #eef0f4;
+  --muted: #8b93a3;
+  --accent: #eef0f4;
 }
 
 * { box-sizing: border-box; }
@@ -20,6 +35,7 @@ html, body {
   color: var(--text);
   font-family: var(--font);
   -webkit-font-smoothing: antialiased;
+  transition: background .35s ease, color .35s ease;
 }
 
 body {
@@ -27,94 +43,159 @@ body {
   align-items: center;
   justify-content: center;
   min-height: 100dvh;
-  padding: 24px 16px;
+  padding: 76px 16px 28px;
   user-select: none;
   -webkit-tap-highlight-color: transparent;
 }
 
-/* Game card */
+/* ---------------- Top HUD ---------------- */
+.topbar {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: 56px;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 0 18px;
+  background: color-mix(in srgb, var(--bg) 78%, transparent);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--line);
+  transition: background .35s ease, border-color .35s ease;
+}
+.topbar .brand { font-weight: 800; font-size: 15px; letter-spacing: -0.01em; display: flex; align-items: center; gap: 8px; }
+.dot-dino { font-size: 16px; }
+.topbar .scores {
+  display: flex; align-items: baseline; gap: 10px;
+  font-variant-numeric: tabular-nums; font-size: 13px; color: var(--muted); font-weight: 600;
+}
+.topbar .scores .score #cur { color: var(--text); font-weight: 700; }
+.topbar .scores .best b { color: var(--text); }
+.topbar .scores .sep { opacity: .4; }
+.topbar .scores .coinwrap b { color: var(--text); }
+.topbar .scores .coinwrap.flash { animation: coinpop .4s ease; }
+@keyframes coinpop { 0%{ transform: scale(1);} 40%{ transform: scale(1.35); color: var(--coin);} 100%{ transform: scale(1);} }
+
+.tools { display: flex; gap: 6px; }
+.tool {
+  width: 34px; height: 34px; border-radius: 10px;
+  border: 1px solid var(--line); background: var(--card);
+  cursor: pointer; font-size: 15px; line-height: 1;
+  display: inline-flex; align-items: center; justify-content: center;
+  transition: transform .1s ease, background .2s ease;
+}
+.tool:hover { transform: translateY(-1px); }
+.tool.off { opacity: .45; }
+
+/* ---------------- Game card ---------------- */
 .stage {
   width: 100%;
-  max-width: 640px;
+  max-width: 660px;
   background: var(--card);
   border: 1px solid var(--line);
-  border-radius: 16px;
-  box-shadow: 0 10px 30px -18px rgba(0, 0, 0, 0.25);
-  padding: 20px;
+  border-radius: var(--radius);
+  box-shadow: 0 18px 50px -28px rgba(0,0,0,.35);
+  padding: 26px 26px 30px;
+  transition: background .35s ease, border-color .35s ease;
 }
 
-.hud {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  margin-bottom: 12px;
-}
-.hud .title { font-size: 15px; font-weight: 700; letter-spacing: -0.01em; }
-.hud .hint {
-  font-size: 12px;
-  font-weight: 600;
-  letter-spacing: 0.04em;
-  color: var(--muted);
-}
-
-/* Runner area — fixed height, classic Chrome dino on light */
-.interstitial-wrapper,
-.offline .interstitial-wrapper {
+/* Runner area (card mode) — base height only on .interstitial-wrapper so the
+   engine's `.arcade-mode .interstitial-wrapper{height:100vh}` can win. */
+.interstitial-wrapper {
   position: relative;
   width: 100%;
   max-width: 600px;
-  height: 150px;
+  height: 160px;
   margin: 0 auto;
-  padding-top: 0;
-  color: var(--text);
   overflow: hidden;
 }
-.runner-canvas { border-bottom: 1px solid var(--line); }
+.offline .interstitial-wrapper { padding-top: 0; color: var(--text); } /* beat engine padding */
+.runner-canvas { border-bottom: 2px solid var(--line); }
 
-/* Neutralise the engine's fullscreen "arcade mode" so the game stays
-   inside our fixed card when a run starts. */
-.arcade-mode .interstitial-wrapper { height: 150px !important; max-width: 600px !important; }
-.arcade-mode .runner-container { transform: none !important; }
+/* Night: invert the dark Chrome sprites so they show on a dark background. */
+body.theme-dark .runner-canvas,
+body.inverted .runner-canvas { filter: invert(1) hue-rotate(180deg); }
 
-/* Overlays */
+/* ---------------- Fullscreen "arcade" experience ----------------
+   The engine adds body.arcade-mode + scales .runner-container (with its own
+   250ms transition) when a run starts -> game zooms up to fill the screen. */
+body.arcade-mode { overflow: hidden; }
+body.arcade-mode .topbar { background: color-mix(in srgb, var(--bg) 55%, transparent); border-bottom-color: transparent; }
+body.arcade-mode .stage {
+  position: fixed; inset: 0;
+  max-width: none; margin: 0; padding: 0;
+  border: 0; border-radius: 0; box-shadow: none;
+  background: var(--bg);
+  display: flex; align-items: center; justify-content: center;
+  animation: fsfade .45s ease;
+}
+@keyframes fsfade { from { opacity: .35; } to { opacity: 1; } }
+body.arcade-mode .interstitial-wrapper { max-width: 100%; }   /* let engine 100vh apply */
+body.arcade-mode .runner-canvas { border-bottom: 0; }
+
+/* ---------------- Overlays ---------------- */
 .overlay {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  text-align: center;
-  background: rgba(255, 255, 255, 0.82);
-  backdrop-filter: blur(1px);
-  transition: opacity 0.3s ease, visibility 0.3s ease;
-  z-index: 5;
+  position: absolute; inset: 0; z-index: 6;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 12px; text-align: center;
+  background: color-mix(in srgb, var(--card) 86%, transparent);
+  backdrop-filter: blur(2px);
+  transition: opacity .3s ease, visibility .3s ease;
 }
 .overlay.hidden { opacity: 0; visibility: hidden; }
-.overlay h2 { margin: 0; font-size: 20px; font-weight: 700; }
-.overlay p { margin: 0; font-size: 14px; color: var(--muted); }
-.overlay p b { color: var(--text); }
+/* In fullscreen the overlay should cover the whole screen */
+body.arcade-mode .overlay { position: fixed; }
 
-.btn {
-  appearance: none;
-  cursor: pointer;
-  margin-top: 2px;
-  padding: 9px 18px;
-  border: 0;
-  border-radius: 999px;
-  background: var(--accent);
-  color: #fff;
-  font-family: var(--font);
-  font-size: 13px;
-  font-weight: 700;
+.overlay .big { margin: 0; font-size: 15px; font-weight: 600; }
+.overlay .big b { font-weight: 800; }
+.overlay .sub { margin: 0; font-size: 12.5px; color: var(--muted); }
+.overlay h2 { margin: 0; font-size: 24px; font-weight: 800; letter-spacing: -0.02em; }
+.overlay .stats { margin: 0; font-size: 14px; color: var(--muted); display: flex; gap: 8px; align-items: baseline; }
+.overlay .stats b { color: var(--text); font-variant-numeric: tabular-nums; }
+.overlay .stats .sep { opacity: .4; }
+
+/* Difficulty selector */
+.diffrow { display: flex; align-items: center; gap: 6px; margin-bottom: 2px; }
+.diffrow .lbl { font-size: 11px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); margin-right: 4px; }
+.diff {
+  cursor: pointer; padding: 6px 12px; border-radius: 999px;
+  border: 1px solid var(--line); background: transparent; color: var(--muted);
+  font-family: var(--font); font-size: 12px; font-weight: 700;
+  transition: all .15s ease;
 }
-.btn:hover { opacity: 0.9; }
+.diff:hover { color: var(--text); }
+.diff.on { background: var(--accent); color: var(--card); border-color: var(--accent); }
+
+.btnrow { display: flex; gap: 8px; }
+.btn {
+  appearance: none; cursor: pointer; margin-top: 2px;
+  padding: 10px 20px; border: 0; border-radius: 999px;
+  background: var(--accent); color: var(--card);
+  font-family: var(--font); font-size: 13px; font-weight: 700;
+  transition: transform .1s ease, opacity .2s ease;
+}
+.btn:hover { transform: translateY(-1px); }
+.btn.ghost { background: transparent; color: var(--muted); border: 1px solid var(--line); }
+
+/* New-best celebration */
+.overlay.celebrate h2 { color: var(--good); }
+.confetti { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+.confetti span {
+  position: absolute; top: -12px; font-size: 16px;
+  animation: fall 1.1s linear forwards;
+}
+@keyframes fall {
+  0% { transform: translateY(-10px) rotate(0); opacity: 1; }
+  100% { transform: translateY(220px) rotate(320deg); opacity: 0; }
+}
+
+@media (max-width: 560px) {
+  .topbar .brand { font-size: 13px; }
+  .topbar .scores { font-size: 11.5px; gap: 7px; }
+  .stage { padding: 16px; }
+  .diffrow .lbl { display: none; }
+}
 
 /* Hide engine's legacy chrome bits */
 #main-content, #offline-resources, .icon-offline { display: none !important; }
-
-@media (max-width: 520px) {
-  .stage { padding: 14px; }
-  .hud .hint { display: none; }
-}
