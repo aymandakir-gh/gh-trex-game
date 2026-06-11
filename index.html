@@ -28,6 +28,8 @@
         <button class="tab" data-game="snake">Snake</button>
         <button class="tab" data-game="2048">2048</button>
         <button class="tab" data-game="breakout">Breakout</button>
+        <button class="tab" data-game="battle">Battle</button>
+        <button class="tab" data-game="kart">Kart 3D</button>
       </div>
       <button id="mute" class="tool" title="Sound (M)">&#128266;</button>
       <button id="theme" class="tool" title="Theme (T)">&#127769;</button>
@@ -99,11 +101,36 @@
       </div>
     </section>
 
+    <!-- BATTLE (local 2-player) -->
+    <section class="view game-view hidden" id="view-battle">
+      <div class="board">
+        <canvas id="battle-canvas"></canvas>
+        <div class="overlay" data-role="start"><div class="panel">
+          <h2>Dino Battle</h2>
+          <p class="sub">P1 <b>WASD</b> move &middot; <b>Space</b> drop &nbsp;&middot;&nbsp; P2 <b>Arrows</b> move &middot; <b>Enter</b> drop</p>
+          <p class="sub">Grab &#127820; for traps &#9650; &middot; drop them to cost a heart &#9829; &middot; last dino wins</p>
+          <button class="btn" data-role="start-btn">Start battle</button>
+        </div></div>
+        <div class="overlay hidden" data-role="over"><div class="panel"><h2 data-role="title">P1 wins!</h2><button class="btn" data-role="replay">Rematch</button></div></div>
+      </div>
+    </section>
+
+    <!-- KART 3D (prototype) -->
+    <section class="view game-view hidden" id="view-kart">
+      <div class="board kart-board">
+        <div id="kart-mount" class="kart-mount"></div>
+        <div class="kart-hud" data-role="hud"></div>
+        <div class="kart-tip">W/&#8593; accelerate &middot; S/&#8595; brake &middot; A/D steer &nbsp;<span data-role="msg"></span></div>
+      </div>
+    </section>
+
   </main>
 
   <script src="arcade.js"></script>
   <script src="engine.js"></script>
   <script src="games.js"></script>
+  <script src="battle.js"></script>
+  <script src="kart.js"></script>
   <script src="dino.js"></script>
 </body>
 </html>
