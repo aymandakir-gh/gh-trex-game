@@ -17,7 +17,6 @@
 
 <body class="offline">
 
-  <!-- Top brand bar -->
   <header class="gh-topbar">
     <div class="gh-brand">
       <svg class="gh-logo" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="GH">
@@ -34,14 +33,12 @@
     </div>
   </header>
 
-  <!-- Game stage -->
   <main class="gh-stage">
     <div class="gh-hud">
       <span class="gh-status">Live run</span>
       <span>Space / &#8593; to jump &nbsp;&#183;&nbsp; &#8595; to duck</span>
     </div>
 
-    <!-- Engine renders its canvas inside here -->
     <div class="interstitial-wrapper">
       <div class="gh-overlay" id="gh-start">
         <h2>Ready to grow?</h2>
@@ -55,11 +52,16 @@
       </div>
     </div>
 
-    <!-- Sprite + audio resources. src values are injected by boot.js from
-         assets.js (base64), then the sprite sheet is recolored to GH orange. -->
+    <!-- Engine expects this element (hidden); init() sets its visibility. -->
+    <div class="icon icon-offline" aria-hidden="true"></div>
+
+    <!-- Chrome dino sprite sheets, served via CDN (CORS-enabled so boot.js can
+         recolor them to GH orange on a canvas). Audio template kept empty. -->
     <div id="offline-resources">
-      <img id="offline-resources-1x" alt="">
-      <img id="offline-resources-2x" alt="">
+      <img id="offline-resources-1x" crossorigin="anonymous" alt=""
+           src="https://cdn.jsdelivr.net/gh/wayou/t-rex-runner@gh-pages/assets/default_100_percent/100-offline-sprite.png">
+      <img id="offline-resources-2x" crossorigin="anonymous" alt=""
+           src="https://cdn.jsdelivr.net/gh/wayou/t-rex-runner@gh-pages/assets/default_200_percent/200-offline-sprite.png">
       <template id="audio-resources">
         <audio id="offline-sound-press"></audio>
         <audio id="offline-sound-hit"></audio>
@@ -73,7 +75,6 @@
     <span><a href="https://gh.company" target="_blank" rel="noopener">gh.company</a> &#183; built for the team</span>
   </footer>
 
-  <script src="assets.js"></script>
   <script src="engine.js"></script>
   <script src="boot.js"></script>
 </body>
