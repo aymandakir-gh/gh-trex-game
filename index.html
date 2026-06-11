@@ -30,6 +30,7 @@
         <button class="tab" data-game="breakout">Breakout</button>
         <button class="tab" data-game="battle">Battle</button>
         <button class="tab" data-game="kart">Kart 3D</button>
+        <button class="tab" data-game="online">Online</button>
       </div>
       <button id="mute" class="tool" title="Sound (M)">&#128266;</button>
       <button id="theme" class="tool" title="Theme (T)">&#127769;</button>
@@ -124,6 +125,21 @@
       </div>
     </section>
 
+    <!-- ONLINE (multiplayer beta) -->
+    <section class="view game-view hidden" id="view-online">
+      <div class="board">
+        <canvas id="online-canvas"></canvas>
+        <div class="overlay" data-role="lobby"><div class="panel">
+          <h2>Online <span class="sub">beta</span></h2>
+          <p class="sub">Shared room &mdash; move with arrows, see others live. Needs the relay server (see <b>server/</b>).</p>
+          <input class="field" data-role="url" placeholder="ws://localhost:8787  or  wss://your-app.up.railway.app">
+          <div class="lobrow"><input class="field" data-role="room" placeholder="room code" value="dino"><input class="field" data-role="name" placeholder="your name"></div>
+          <button class="btn" data-role="connect">Connect</button>
+          <p class="sub" data-role="status"></p>
+        </div></div>
+      </div>
+    </section>
+
   </main>
 
   <script src="arcade.js"></script>
@@ -131,6 +147,7 @@
   <script src="games.js"></script>
   <script src="battle.js"></script>
   <script src="kart.js"></script>
+  <script src="online.js"></script>
   <script src="dino.js"></script>
 </body>
 </html>
