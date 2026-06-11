@@ -1,13 +1,34 @@
 /* ============================================================
    GH RUNNER — boot
-   1. Recolor the Chrome sprite sheet (#535353 artwork) into GH orange.
-   2. Start the engine once the recolored sprites are ready.
-   3. Wire the start overlay + game-over overlay.
+   1. Inject base64 sprite + audio sources from assets.js (GH_ASSETS).
+   2. Recolor the Chrome sprite sheet (#535353 artwork) into GH orange.
+   3. Start the engine once the recolored sprites are ready.
+   4. Wire the start overlay + game-over overlay.
    ============================================================ */
 (function () {
   'use strict';
 
   var GH_ORANGE = { r: 255, g: 106, b: 26 }; // --gh-orange #ff6a1a
+
+  // Pull the base64 asset sources out of assets.js into the DOM nodes the
+  // engine expects. Keeps the markup tiny and the codebase host-agnostic.
+  function injectAssets() {
+    var A = window.GH_ASSETS || {};
+    var s1 = document.getElementById('offline-resources-1x');
+    var s2 = document.getElementById('offline-resources-2x');
+    if (s1 && A.spriteSheet1x) s1.src = A.spriteSheet1x;
+    if (s2 && A.spriteSheet2x) s2.src = A.spriteSheet2x;
+    var tpl = document.getElementById('audio-resources');
+    if (tpl && tpl.content) {
+      setSrc(tpl.content, 'offline-sound-press', A.soundPress);
+      setSrc(tpl.content, 'offline-sound-hit', A.soundHit);
+      setSrc(tpl.content, 'offline-sound-reached', A.soundReached);
+    }
+  }
+  function setSrc(root, id, val) {
+    var el = root.getElementById(id);
+    if (el && val) el.src = val;
+  }
 
   // Recolor every opaque pixel of an <img> to GH orange, preserving the
   // alpha channel so anti-aliased edges stay smooth. Returns a Promise.
@@ -54,22 +75,19 @@
       dismissed = true;
       startOverlay.classList.add('gh-hidden');
     }
-    // Any control input begins the run.
     window.addEventListener('keydown', function (e) {
       if (e.keyCode === 32 || e.keyCode === 38) dismissStart();
     });
     window.addEventListener('pointerdown', dismissStart);
 
-    // Poll the engine for crash / restart to drive the game-over card.
     var wasCrashed = false;
     setInterval(function () {
       var r = Runner.instance_;
       if (!r) return;
       if (r.crashed && !wasCrashed) {
         wasCrashed = true;
-        var score = digits(r.distanceMeter.getActualDistance(
+        finalScore.textContent = digits(r.distanceMeter.getActualDistance(
           Math.ceil(r.distanceRan)));
-        finalScore.textContent = score;
         overOverlay.classList.remove('gh-hidden');
       } else if (!r.crashed && wasCrashed) {
         wasCrashed = false;
@@ -77,7 +95,6 @@
       }
     }, 120);
 
-    // Restart button replays via the engine's own restart.
     document.getElementById('gh-replay').addEventListener('click', function () {
       var r = Runner.instance_;
       if (r && r.crashed) r.restart();
@@ -85,11 +102,10 @@
     });
   }
 
-  function digits(n) {
-    return String(n).padStart(5, '0');
-  }
+  function digits(n) { return String(n).padStart(5, '0'); }
 
   document.addEventListener('DOMContentLoaded', function () {
+    injectAssets();
     var imgs = [
       document.getElementById('offline-resources-1x'),
       document.getElementById('offline-resources-2x')
