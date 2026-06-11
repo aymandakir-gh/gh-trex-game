@@ -7,27 +7,49 @@
   <meta name="theme-color" content="#f7f7f7">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="engine.css">
   <link rel="stylesheet" href="brand.css">
 </head>
 
 <body class="offline">
 
-  <main class="stage">
-    <div class="hud">
-      <span class="title">Dino Runner</span>
-      <span class="hint">Space / &#8593; jump &nbsp;&#183;&nbsp; &#8595; duck</span>
+  <!-- Always-visible HUD -->
+  <div class="topbar">
+    <div class="brand"><span class="dot-dino">&#129430;</span> Dino Runner</div>
+    <div class="scores">
+      <span class="score"><span id="cur">00000</span></span>
+      <span class="sep">&middot;</span>
+      <span class="best">BEST <b id="best">00000</b></span>
+      <span class="coinwrap">&#129689; <b id="coins">0</b></span>
     </div>
+    <div class="tools">
+      <button id="mute" class="tool" title="Sound (M)" aria-label="Toggle sound">&#128266;</button>
+      <button id="theme" class="tool" title="Day / Night (D)" aria-label="Toggle theme">&#127769;</button>
+    </div>
+  </div>
 
+  <main class="stage">
     <div class="interstitial-wrapper">
       <div class="overlay" id="start">
-        <p>Press <b>Space</b> or tap to start</p>
+        <div class="diffrow" id="diffrow">
+          <span class="lbl">Difficulty</span>
+          <button class="diff" data-d="easy">Easy</button>
+          <button class="diff on" data-d="normal">Normal</button>
+          <button class="diff" data-d="hard">Hard</button>
+        </div>
+        <p class="big">Press <b>Space</b> or tap to start</p>
+        <p class="sub">&#8593; jump &middot; &#8595; duck &middot; grab &#129689; coins</p>
       </div>
+
       <div class="overlay hidden" id="over">
-        <h2>Game over</h2>
-        <p>Distance: <b id="final-score">00000</b></p>
-        <button class="btn" id="replay">Play again</button>
+        <h2 id="over-title">Game over</h2>
+        <div class="confetti" id="confetti" aria-hidden="true"></div>
+        <p class="stats">Distance <b id="final">00000</b><span class="sep">&middot;</span>Best <b id="final-best">00000</b><span class="sep">&middot;</span>&#129689; <b id="final-coins">0</b></p>
+        <div class="btnrow">
+          <button class="btn" id="replay">Play again</button>
+          <button class="btn ghost" id="exit">Exit</button>
+        </div>
       </div>
     </div>
 
