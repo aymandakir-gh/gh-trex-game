@@ -1,0 +1,236 @@
+/* ============================================================
+   GH RUNNER — brand layer
+   Dark anthracite + GH orange. Inter. Modern, minimal.
+   ============================================================ */
+
+:root {
+  --gh-bg-0: #08080a;
+  --gh-bg-1: #0d0d10;
+  --gh-bg-2: #15151a;
+  --gh-line: #232329;
+  --gh-orange: #ff6a1a;
+  --gh-orange-soft: #ff8a4d;
+  --gh-orange-dim: rgba(255, 106, 26, 0.14);
+  --gh-text: #f4f4f5;
+  --gh-muted: #8a8a93;
+  --gh-radius: 20px;
+  --gh-font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  height: 100%;
+  margin: 0;
+  background:
+    radial-gradient(1100px 600px at 50% -10%, #16161c 0%, transparent 60%),
+    linear-gradient(180deg, var(--gh-bg-1) 0%, var(--gh-bg-0) 100%);
+  color: var(--gh-text);
+  font-family: var(--gh-font);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100dvh;
+  padding: 24px 16px;
+  gap: 22px;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* ---------- Top brand bar ---------- */
+.gh-topbar {
+  width: 100%;
+  max-width: 760px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.gh-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.gh-logo {
+  width: 38px;
+  height: 38px;
+  flex: none;
+  filter: drop-shadow(0 0 10px rgba(255, 106, 26, 0.35));
+}
+
+.gh-wordmark {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.05;
+}
+.gh-wordmark b {
+  font-size: 17px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+.gh-wordmark span {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--gh-muted);
+}
+
+.gh-pillars {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--gh-muted);
+}
+.gh-pillars i { color: var(--gh-orange); font-style: normal; }
+.gh-pillars .dot { opacity: 0.4; }
+
+/* ---------- Game stage ---------- */
+.gh-stage {
+  position: relative;
+  width: 100%;
+  max-width: 760px;
+  border: 1px solid var(--gh-line);
+  border-radius: var(--gh-radius);
+  background:
+    radial-gradient(600px 200px at 50% 120%, var(--gh-orange-dim) 0%, transparent 70%),
+    linear-gradient(180deg, #101014 0%, #0a0a0d 100%);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.03) inset,
+    0 30px 70px -30px rgba(0, 0, 0, 0.8);
+  padding: 22px;
+  overflow: hidden;
+}
+
+/* HUD row above the canvas */
+.gh-hud {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--gh-muted);
+}
+.gh-hud .gh-status { display: inline-flex; align-items: center; gap: 8px; }
+.gh-hud .gh-status::before {
+  content: "";
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--gh-orange);
+  box-shadow: 0 0 10px var(--gh-orange);
+  animation: gh-pulse 1.6s ease-in-out infinite;
+}
+@keyframes gh-pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.35; } }
+
+/* The runner — engine renders into this wrapper */
+.interstitial-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+  min-height: 150px;
+}
+
+/* Engine's canvas: ground baseline + crisp edges */
+.runner-canvas {
+  border-bottom: 2px solid var(--gh-line);
+}
+
+/* ---------- Overlays ---------- */
+.gh-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  text-align: center;
+  background: rgba(8, 8, 10, 0.55);
+  backdrop-filter: blur(2px);
+  border-radius: 12px;
+  transition: opacity 0.35s ease, visibility 0.35s ease;
+  z-index: 5;
+}
+.gh-overlay.gh-hidden { opacity: 0; visibility: hidden; }
+
+.gh-overlay h2 {
+  margin: 0;
+  font-size: clamp(20px, 4vw, 28px);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+.gh-overlay p { margin: 0; color: var(--gh-muted); font-size: 14px; }
+
+.gh-key {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 4px;
+  padding: 9px 16px;
+  border: 1px solid var(--gh-line);
+  border-radius: 999px;
+  background: var(--gh-bg-2);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--gh-text);
+}
+.gh-key b { color: var(--gh-orange); }
+
+.gh-cta {
+  appearance: none;
+  cursor: pointer;
+  margin-top: 4px;
+  padding: 11px 22px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--gh-orange);
+  color: #140a04;
+  font-family: var(--gh-font);
+  font-size: 14px;
+  font-weight: 800;
+  letter-spacing: 0.01em;
+  box-shadow: 0 10px 24px -10px var(--gh-orange);
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+}
+.gh-cta:hover { transform: translateY(-1px); box-shadow: 0 14px 30px -10px var(--gh-orange); }
+.gh-cta:active { transform: translateY(0); }
+
+/* ---------- Footer ---------- */
+.gh-footer {
+  width: 100%;
+  max-width: 760px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 12px;
+  color: var(--gh-muted);
+}
+.gh-footer .gh-tag { color: var(--gh-text); font-weight: 600; }
+.gh-footer a { color: var(--gh-muted); text-decoration: none; }
+.gh-footer a:hover { color: var(--gh-orange); }
+
+/* ---------- Responsive ---------- */
+@media (max-width: 560px) {
+  .gh-pillars { display: none; }
+  .gh-stage { padding: 16px; border-radius: 16px; }
+  .gh-footer { flex-direction: column; gap: 6px; text-align: center; }
+}
+
+/* Hide engine's legacy chrome bits we don't use */
+#main-content, #offline-resources, .icon-offline { display: none !important; }
