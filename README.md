@@ -1,22 +1,20 @@
-# 🦖 GH Runner
+# Dino Runner
 
-The GrowthHackers take on the Chrome offline dino game. **Strategy. Iteration. Growth.** Now jump some cacti.
+A clean, light, unbranded take on the Chrome offline dino game. Open `index.html` and play.
 
-A self-contained static web game — no build step, no dependencies, no binary assets. Open `index.html` and play.
+Live: https://aymandakir-gh.github.io/gh-trex-game/
 
 ## What's inside
 
 | File | Role |
 |---|---|
-| `index.html` | Branded GH shell + inlined sprite/audio assets (base64) |
+| `index.html` | Minimal light shell; loads the Chrome dino sprite sheets from a CDN |
 | `engine.js` | Game engine (forked from [wayou/t-rex-runner](https://github.com/wayou/t-rex-runner), BSD-3) |
 | `engine.css` | Original engine layout |
-| `brand.css` | GH brand layer — dark anthracite + GH orange, Inter, responsive |
-| `boot.js` | Recolors the sprite sheet to GH orange at runtime + wires start/game-over overlays |
+| `brand.css` | Light, minimal theme + an override that neutralizes the engine's fullscreen "arcade mode" so the game stays inside its card |
+| `boot.js` | Starts the engine, injects a silent audio clip, wires the start / game-over overlays |
 
-## How the branding works
-
-The original Chrome sprite sheet is monochrome artwork (`#535353`) on a transparent background. On load, `boot.js` repaints every opaque pixel to GH orange (`#ff6a1a`) while preserving the alpha channel, then starts the engine. Change one constant in `boot.js` to rebrand the whole game.
+The classic dark Chrome dino is used as-is on a light background — no recolor, no build step, no bundler.
 
 ## Controls
 
@@ -27,17 +25,14 @@ The original Chrome sprite sheet is monochrome artwork (`#535353`) on a transpar
 ## Run locally
 
 ```bash
-# any static server, or just open the file
-python3 -m http.server 8080
-# → http://localhost:8080
+# any static server, or just open index.html directly
+python3 -m http.server 8080   # → http://localhost:8080
 ```
 
 ## Deploy
 
-Static site — host it anywhere. For Vercel: import this repo at [vercel.com/new](https://vercel.com/new) (zero config) or run `vercel deploy` from the project root.
+Auto-deploys to GitHub Pages on every push to `main` (see `.github/workflows/deploy.yml`). Also works as a zero-config import on Vercel/Netlify.
 
 ---
 
-Built for the team · [gh.company](https://gh.company) · *Digital Doping For Your Business*
-
-Game engine © The Chromium Authors / @liuwayong (BSD-3-Clause, see `LICENSE`). GH branding layer © GrowthHackers.
+Game engine © The Chromium Authors / @liuwayong (BSD-3-Clause, see `LICENSE`).
