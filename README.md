@@ -1,48 +1,47 @@
 # 🕹️ Dino Arcade
 
-A small, clean web arcade — starting from a Chrome-dino clone and growing into a multi-game launcher. No build step, no bundler, no dependencies.
+A small, clean web arcade — six games behind one launcher. No build step, no bundler, no dependencies (the 3D kart lazy-loads Three.js from a CDN).
 
 **▶ Play:** https://aymandakir-gh.github.io/gh-trex-game/
 
-**🗺 Plan:** see [ROADMAP.md](ROADMAP.md) for the full phased plan (launcher + classic games → local 2-player → 3D kart → online multiplayer).
+**🗺 Plan:** see [ROADMAP.md](ROADMAP.md).
 
 ## Games
 
 | Game | Status |
 |---|---|
-| **Dino Runner** — jump cacti, grab coins, beat your best | ✅ Playable |
-| Snake · 2048 · Breakout | 🚧 Phase 1 (launcher) |
-| 2-player Dino battle (local) | 🔜 Phase 2 |
-| 3D kart racer | 🔜 Phase 3 |
-| Online multiplayer | 🔜 Phase 4 |
+| **Dino Runner** — jump cacti, grab coins, beat your best | ✅ Live |
+| **Snake** · **2048** · **Breakout** | ✅ Live |
+| **Dino Battle** — local 2-player (hearts · bananas · traps) | ✅ Live |
+| **Kart 3D** — single-player Three.js racer (prototype) | ✅ Live |
+| **Online** — realtime rooms (beta) | 🟡 Needs the relay server hosted ([`server/`](server/)) |
 
-## Dino Runner features
-
-- Light / dark themes (🌙 button or **D**) + auto night-mode the longer you survive
-- Procedural sound effects + mute (🔊 button or **M**)
-- High score saved between sessions, with a "new best" celebration
-- Difficulty: Easy / Normal / Hard
-- Collectible coins
-- Fullscreen "zoom-in" when a run starts · **Esc** to exit
+Shared across the arcade: light/dark themes (🌙 / **T**), procedural sound + mute (🔊 / **M**), and per-game saved high scores.
 
 ## Controls
 
-- **Space / ↑** — jump · **↓** — duck · **tap** — jump (touch)
+- **Dino** — Space/↑ jump · ↓ duck
+- **Snake / 2048** — arrow keys
+- **Breakout** — ← → or mouse
+- **Battle** — P1 WASD + Space · P2 Arrows + Enter
+- **Kart** — W/↑ accelerate · S/↓ brake · A/D steer
+- **Online** — arrow keys (set the server URL first)
+
+## Online multiplayer
+
+The browser can't host the realtime server, so the **relay lives in [`server/`](server/)** (Node + `ws`). To enable online play: deploy `server/` (Railway/Render, `npm start`), then paste the resulting **`wss://…`** URL into the **Online** tab. Verified end-to-end locally; see [`server/README.md`](server/README.md).
 
 ## Run locally
 
 ```bash
-python3 -m http.server 8080   # then open http://localhost:8080
+python3 -m http.server 8080     # game → http://localhost:8080
+cd server && npm install && npm start   # relay → ws://localhost:8787 (optional, for Online)
 ```
-
-## How it works
-
-The classic Chrome dino sprite sheets are loaded from a CDN (jsDelivr, CORS-enabled) and the game runs on the original engine (forked from [wayou/t-rex-runner](https://github.com/wayou/t-rex-runner), BSD-3). The arcade shell (themes, HUD, sound, scores, coins, fullscreen) is layered on top in `brand.css` + `boot.js`.
 
 ## Deploy
 
-Auto-deploys to GitHub Pages on every push to `main` via `.github/workflows/deploy.yml`. Also imports zero-config into Vercel/Netlify.
+Auto-deploys to GitHub Pages on every push to `main` via `.github/workflows/deploy.yml`. Also imports zero-config into Vercel/Netlify (static site only — the relay deploys separately).
 
 ---
 
-Engine © The Chromium Authors / @liuwayong (BSD-3-Clause, see `LICENSE`).
+Dino engine © The Chromium Authors / @liuwayong (BSD-3-Clause, see `LICENSE`). 3D via Three.js.
