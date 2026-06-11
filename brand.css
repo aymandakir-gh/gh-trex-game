@@ -136,13 +136,18 @@ body {
 }
 @keyframes gh-pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.35; } }
 
-/* The runner — engine renders into this wrapper */
-.interstitial-wrapper {
+/* The runner — engine renders into this wrapper.
+   Override engine.css's .offline padding/color so the absolutely
+   positioned canvas sits flush at the top of the stage. */
+.interstitial-wrapper,
+.offline .interstitial-wrapper {
   position: relative;
   width: 100%;
   max-width: 600px;
   margin: 0 auto;
   min-height: 150px;
+  padding-top: 0;
+  color: var(--gh-text);
 }
 
 /* Engine's canvas: ground baseline + crisp edges */
