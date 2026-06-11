@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Dino Runner</title>
-  <meta name="theme-color" content="#f7f7f7">
+  <title>Dino Arcade</title>
+  <meta name="theme-color" content="#f4f5f7">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
@@ -14,63 +14,96 @@
 
 <body class="offline">
 
-  <!-- Always-visible HUD -->
   <div class="topbar">
-    <div class="brand"><span class="dot-dino">&#129430;</span> Dino Runner</div>
+    <div class="brand"><span class="dot-dino">&#129430;</span> Dino Arcade</div>
     <div class="scores">
       <span class="score"><span id="cur">00000</span></span>
       <span class="sep">&middot;</span>
       <span class="best">BEST <b id="best">00000</b></span>
       <span class="coinwrap">&#129689; <b id="coins">0</b></span>
     </div>
-    <div class="tools">
-      <button id="mute" class="tool" title="Sound (M)" aria-label="Toggle sound">&#128266;</button>
-      <button id="theme" class="tool" title="Day / Night (D)" aria-label="Toggle theme">&#127769;</button>
+    <div class="right">
+      <div class="tabs">
+        <button class="tab on" data-game="dino">Dino</button>
+        <button class="tab" data-game="snake">Snake</button>
+        <button class="tab" data-game="2048">2048</button>
+        <button class="tab" data-game="breakout">Breakout</button>
+      </div>
+      <button id="mute" class="tool" title="Sound (M)">&#128266;</button>
+      <button id="theme" class="tool" title="Theme (T)">&#127769;</button>
     </div>
   </div>
 
-  <main class="stage">
-    <div class="interstitial-wrapper">
-      <div class="overlay" id="start">
-        <div class="diffrow" id="diffrow">
-          <span class="lbl">Difficulty</span>
-          <button class="diff" data-d="easy">Easy</button>
-          <button class="diff on" data-d="normal">Normal</button>
-          <button class="diff" data-d="hard">Hard</button>
+  <main class="screen">
+
+    <!-- DINO -->
+    <section class="view" id="view-dino">
+      <div class="stage">
+        <div class="interstitial-wrapper">
+          <div class="overlay" id="dino-start">
+            <div class="panel">
+              <div class="diffrow">
+                <span class="lbl">Difficulty</span>
+                <button class="diff" data-d="easy">Easy</button>
+                <button class="diff on" data-d="normal">Normal</button>
+                <button class="diff" data-d="hard">Hard</button>
+              </div>
+              <p class="big">Press <b>Space</b> or tap to start</p>
+              <p class="sub">&#8593; jump &middot; &#8595; duck &middot; grab &#129689; coins</p>
+            </div>
+          </div>
+          <div class="overlay hidden" id="dino-over">
+            <div class="panel">
+              <h2 id="dino-over-title">Game over</h2>
+              <div class="confetti" id="dino-confetti" aria-hidden="true"></div>
+              <p class="stats">Distance <b id="dino-final">00000</b><span class="sep">&middot;</span>Best <b id="dino-final-best">00000</b><span class="sep">&middot;</span>&#129689; <b id="dino-final-coins">0</b></p>
+              <div class="btnrow"><button class="btn" id="dino-replay">Play again</button><button class="btn ghost" id="dino-exit">Exit</button></div>
+            </div>
+          </div>
         </div>
-        <p class="big">Press <b>Space</b> or tap to start</p>
-        <p class="sub">&#8593; jump &middot; &#8595; duck &middot; grab &#129689; coins</p>
-      </div>
-
-      <div class="overlay hidden" id="over">
-        <h2 id="over-title">Game over</h2>
-        <div class="confetti" id="confetti" aria-hidden="true"></div>
-        <p class="stats">Distance <b id="final">00000</b><span class="sep">&middot;</span>Best <b id="final-best">00000</b><span class="sep">&middot;</span>&#129689; <b id="final-coins">0</b></p>
-        <div class="btnrow">
-          <button class="btn" id="replay">Play again</button>
-          <button class="btn ghost" id="exit">Exit</button>
+        <div class="icon icon-offline" aria-hidden="true"></div>
+        <div id="offline-resources">
+          <img id="offline-resources-1x" alt="" src="https://cdn.jsdelivr.net/gh/wayou/t-rex-runner@gh-pages/assets/default_100_percent/100-offline-sprite.png">
+          <img id="offline-resources-2x" alt="" src="https://cdn.jsdelivr.net/gh/wayou/t-rex-runner@gh-pages/assets/default_200_percent/200-offline-sprite.png">
+          <template id="audio-resources">
+            <audio id="offline-sound-press"></audio><audio id="offline-sound-hit"></audio><audio id="offline-sound-reached"></audio>
+          </template>
         </div>
       </div>
-    </div>
+    </section>
 
-    <!-- Engine expects this element (hidden); init() sets its visibility. -->
-    <div class="icon icon-offline" aria-hidden="true"></div>
+    <!-- SNAKE -->
+    <section class="view game-view hidden" id="view-snake">
+      <div class="board">
+        <canvas id="snake-canvas"></canvas>
+        <div class="overlay" data-role="start"><div class="panel"><h2>Snake</h2><p class="sub">Arrow keys / WASD to turn</p><p class="big">Press <b>Space</b> or tap to start</p></div></div>
+        <div class="overlay hidden" data-role="over"><div class="panel"><h2 data-role="title">Game over</h2><p class="stats">Score <b data-role="final">00000</b></p><button class="btn" data-role="replay">Play again</button></div></div>
+      </div>
+    </section>
 
-    <!-- Chrome dino sprite sheets via CDN. -->
-    <div id="offline-resources">
-      <img id="offline-resources-1x" alt=""
-           src="https://cdn.jsdelivr.net/gh/wayou/t-rex-runner@gh-pages/assets/default_100_percent/100-offline-sprite.png">
-      <img id="offline-resources-2x" alt=""
-           src="https://cdn.jsdelivr.net/gh/wayou/t-rex-runner@gh-pages/assets/default_200_percent/200-offline-sprite.png">
-      <template id="audio-resources">
-        <audio id="offline-sound-press"></audio>
-        <audio id="offline-sound-hit"></audio>
-        <audio id="offline-sound-reached"></audio>
-      </template>
-    </div>
+    <!-- 2048 -->
+    <section class="view game-view hidden" id="view-2048">
+      <div class="board">
+        <canvas id="g2048-canvas"></canvas>
+        <div class="overlay" data-role="start"><div class="panel"><h2>2048</h2><p class="sub">Arrow keys to merge tiles</p><p class="big">Press <b>Space</b> or tap to start</p></div></div>
+        <div class="overlay hidden" data-role="over"><div class="panel"><h2 data-role="title">No moves left</h2><p class="stats">Score <b data-role="final">00000</b></p><button class="btn" data-role="replay">Play again</button></div></div>
+      </div>
+    </section>
+
+    <!-- BREAKOUT -->
+    <section class="view game-view hidden" id="view-breakout">
+      <div class="board">
+        <canvas id="breakout-canvas"></canvas>
+        <div class="overlay" data-role="start"><div class="panel"><h2>Breakout</h2><p class="sub">&#8592; &#8594; or mouse to move &middot; 3 lives</p><p class="big">Press <b>Space</b> or tap to start</p></div></div>
+        <div class="overlay hidden" data-role="over"><div class="panel"><h2 data-role="title">Game over</h2><p class="stats">Score <b data-role="final">00000</b></p><button class="btn" data-role="replay">Play again</button></div></div>
+      </div>
+    </section>
+
   </main>
 
+  <script src="arcade.js"></script>
   <script src="engine.js"></script>
-  <script src="boot.js"></script>
+  <script src="games.js"></script>
+  <script src="dino.js"></script>
 </body>
 </html>
