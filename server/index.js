@@ -35,7 +35,16 @@ wss.on('connection', (ws) => {
   ws.on('message', (buf) => {
     let m; try { m = JSON.parse(buf.toString()); } catch (e) { return; }
     if (m.t === 'join') {
-      ws.room = (m.room || 'lobby').slice(0, 24);
+      const next = (m.room || 'lobby').slice(0, 24);
+      // Leave any previously joined room so we don't leave a ghost behind.
+      if (ws.room && ws.room !== next && rooms.has(ws.room)) {
+        const old = ws.room;
+        rooms.get(old).delete(ws);
+        broadcast(old, { t: 'left', id: ws.id });
+        broadcast(old, { t: 'roster', players: roster(old) });
+        if (rooms.get(old).size === 0) rooms.delete(old);
+      }
+      ws.room = next;
       ws.name = (m.name || ws.id).slice(0, 16);
       if (!rooms.has(ws.room)) rooms.set(ws.room, new Set());
       rooms.get(ws.room).add(ws);
