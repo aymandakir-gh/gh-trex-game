@@ -117,7 +117,9 @@
         cp = 0;
         if (started) {
           var lt = (performance.now() - lapStart) / 1000;
-          if (bestLap === 0 || lt < bestLap) { bestLap = Math.round(lt * 10); /*tenths*/ ARC.recordBest('kart', bestLap); }
+          var ltTenths = Math.round(lt * 10); // best lap stored/compared in tenths
+          // Best lap is the SMALLEST; ARC.recordBest is maximize-only, so set directly.
+          if (bestLap === 0 || ltTenths < bestLap) { bestLap = ltTenths; ARC.set(ARC.bestKey('kart'), String(bestLap)); }
           lap++;
         }
         lapStart = performance.now(); started = true;
