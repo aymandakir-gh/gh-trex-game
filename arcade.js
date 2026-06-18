@@ -96,6 +96,9 @@
     document.getElementById('theme').addEventListener('click', ARC.toggleTheme);
     document.getElementById('mute').addEventListener('click', ARC.toggleMute);
     window.addEventListener('keydown', function (e) {
+      // Don't hijack keystrokes while the user is typing in a field.
+      var t = e.target;
+      if (t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.isContentEditable)) return;
       var k = (e.key || '').toLowerCase();
       if (k === 'm') ARC.toggleMute();
       else if (k === 't') ARC.toggleTheme();
